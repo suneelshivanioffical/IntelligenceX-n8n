@@ -1,0 +1,604 @@
+{
+  "name": "Customer Sentiments Analysis - Feedbacks",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Get in touch",
+        "formDescription": "Email us with any questions or inquiries \nor use our feedback form.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Full Name",
+              "placeholder": "Type you full name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email Address",
+              "fieldType": "email",
+              "placeholder": "Type you email address",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Contact Number",
+              "fieldType": "number",
+              "placeholder": "Type you number"
+            },
+            {
+              "fieldLabel": "Message",
+              "placeholder": "Types your message to us.",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -144,
+        176
+      ],
+      "id": "bfddeafa-578b-4332-89fe-00c933df523c",
+      "name": "On form submission",
+      "webhookId": "44c3b75f-53b3-4fb5-96e7-10c1eee16f81"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Your role is to determine if the feedback filled by the customer is a complaint, a compliment or a feature addition request.\nThe Feedback is: {{ $json.Message }}\n\nYour response should be only one from the below\n1) Complain\n2) Compliment\n3) Feature Addition Request",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        304
+      ],
+      "id": "ce09d0fa-f5ae-4b49-9fa8-e33d2e3ae33e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        528
+      ],
+      "id": "880e031b-fa5b-4e44-8092-e665f1fac2dc",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FazlS1GMpt3FgLNF",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        512,
+        192
+      ],
+      "id": "cf6792f3-2a2a-4c7c-8bca-c35dbf8cfada",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Complain",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "9196099f-08d6-428b-b383-afd91aae34f3"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "baf11fd8-eaae-4abb-ae52-d107f3937bb0",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Compliment",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f032db67-1d23-48c8-81f7-593789da9971",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Feature Addition Request",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        688,
+        176
+      ],
+      "id": "e94cab7a-19e5-47d2-8bf9-2a46aa502aeb",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NmaU9N6OaqgsxhjsRhO9qnr7fXWVYEWE8NmTTWzaGec",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Complain",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NmaU9N6OaqgsxhjsRhO9qnr7fXWVYEWE8NmTTWzaGec/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $json['Full Name'] }}",
+            "Email Address": "={{ $json['Email Address'] }}",
+            "Feedback": "={{ $json.Message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        0
+      ],
+      "id": "d78d9738-2646-4deb-a80a-f83af3591d2f",
+      "name": "Compain",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "L6zUG5AfiNZFYjTB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NmaU9N6OaqgsxhjsRhO9qnr7fXWVYEWE8NmTTWzaGec",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 924579281,
+          "mode": "list",
+          "cachedResultName": "Compliment",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NmaU9N6OaqgsxhjsRhO9qnr7fXWVYEWE8NmTTWzaGec/edit#gid=924579281"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $json['Full Name'] }}",
+            "Email Address": "={{ $json['Email Address'] }}",
+            "Feedback": "={{ $json.Message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        192
+      ],
+      "id": "023933d7-633d-47dd-a837-c5322ced2a39",
+      "name": "Compliment",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "L6zUG5AfiNZFYjTB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NmaU9N6OaqgsxhjsRhO9qnr7fXWVYEWE8NmTTWzaGec",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1272447370,
+          "mode": "list",
+          "cachedResultName": "Feature Addition Request",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NmaU9N6OaqgsxhjsRhO9qnr7fXWVYEWE8NmTTWzaGec/edit#gid=1272447370"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $json['Full Name'] }}",
+            "Email Address": "={{ $json['Email Address'] }}",
+            "Feedback": "={{ $json.Message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        384
+      ],
+      "id": "dc518afa-af1b-4ff2-ab8d-dbc2eea1f9e1",
+      "name": "Feature Addition Request",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "L6zUG5AfiNZFYjTB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Compain').item.json['Email Address'] }}",
+        "subject": "We have taken your complaint into notice!",
+        "message": "=<!DOCTYPE html>\n<html>\n  <body style=\"font-family: Arial, sans-serif; font-size: 15px; color: #333;\">\n    <p>Hi {{ $('Compain').item.json['Full Name'] }},</p>\n\n    <p>\n      We have already taken your complaint into notice and our team is working on to it and we shall get back to you on what the exact update is thank you so much for bringing this into our notice. We really value our customers and so your complaints and feedbacks matter a lot.\n    </p>\n\n    <p>\n      We should update you asap.\n    </p>\n\n    <p>\n      Regards,<br/>\n      Support Team.\n    </p>\n  </body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1392,
+        0
+      ],
+      "id": "bd3876e2-4039-49cc-b08e-07d2b2dc5179",
+      "name": "Respond to User",
+      "webhookId": "b6849f92-018f-4cd3-9249-626ff3323c85",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1uSqrKi5aoGZtAYX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09MEUUL0JY",
+          "mode": "list",
+          "cachedResultName": "feature-addition-request"
+        },
+        "text": "=Here is New Feature Request Received:\n\nFull Name: {{ $json[\"Full Name\"] }}\nEmail Address: {{ $json[\"Email Address\"] }}\nFeedback: {{ $json.Feedback }}\n",
+        "otherOptions": {
+          "mrkdwn": false,
+          "sendAsUser": "Complain"
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1200,
+        384
+      ],
+      "id": "0967130b-562a-4918-882d-441fe41b2704",
+      "name": "Feature Req to Team on Slack",
+      "webhookId": "637105de-a004-43b3-aaa9-b596f8c5f392",
+      "credentials": {
+        "slackApi": {
+          "id": "PRFFYCQ4WCeKzNZK",
+          "name": "Slack account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09MQ8CFFR7",
+          "mode": "list",
+          "cachedResultName": "complain"
+        },
+        "text": "=Here New Complaint Received, Please review:\n\nFull Name: {{ $json[\"Full Name\"] }}\nEmail Address: {{ $json[\"Email Address\"] }}\nFeedback: {{ $json.Feedback }}\n",
+        "otherOptions": {
+          "mrkdwn": false,
+          "sendAsUser": "Complain"
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "298e69f7-96d6-493f-a3b5-7d59b8b69396",
+      "name": "Complain to Team on Slack",
+      "webhookId": "637105de-a004-43b3-aaa9-b596f8c5f392",
+      "credentials": {
+        "slackApi": {
+          "id": "PRFFYCQ4WCeKzNZK",
+          "name": "Slack account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Compain",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compliment",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Feature Addition Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compain": {
+      "main": [
+        [
+          {
+            "node": "Complain to Team on Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feature Addition Request": {
+      "main": [
+        [
+          {
+            "node": "Feature Req to Team on Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Complain to Team on Slack": {
+      "main": [
+        [
+          {
+            "node": "Respond to User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0e847c8a-bbaf-4d00-8988-41fec02bd0a7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "211a9b3113fb1f50ccdafd8244b5d8994d8d399b72f0515cfe3acf55c2771c71"
+  },
+  "id": "ZHIJg691DFo2on8F",
+  "tags": []
+}
