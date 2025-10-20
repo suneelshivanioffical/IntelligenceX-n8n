@@ -1,6 +1,6 @@
 # Customer Sentiments Analysis – Feedbacks
 
- ![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/Customer%20Sentiments%20Analysis.png?raw=true)
+ ![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/Customer%20Sentiments%20Analysis.png)
  
 ----------------------------------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ The need was clear, a system that could analyze sentiment, categorize feedback, 
 
 Form Submission → AI Agent → Merge → Switch → Route to Team → Notify/Respond
 
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/Workflow%20Logic%20(Breakdown).png?raw=true)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/Workflow%20Logic%20(Breakdown).png)
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ Here’s the concept:
 6. All feedback and results are logged automatically in Google Sheets for record keeping and analytics.
 
 
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/agent_n8n.png?raw=true)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/agent_n8n.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -67,31 +67,31 @@ At the end of the automation process:
    
 - user_complain
 
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/user_complain.png)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/user_complain.png)
 
 - complain_to_team
 
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/complain_to_team.png)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/complain_to_team.png)
 
-- Complain_respond_to_user
+- complain_respond_to_user
 
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/compalin_respond_to_user.png)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/compalin_respond_to_user.png)
 
 2. Compliments are sent to the owner or main team on Slack/Email.
 
 - compliments
   
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/compliments.png)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/compliments.png)
 
 3. Feature Requests are routed to the development team with complete user details for consideration.
 
 - user_feature-req 
   
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/user_feature-req%20.png)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/user_feature-req%20.png)
 
 - feature req_to_team
 
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/feature%20req_to_team.png)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/feature%20req_to_team.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ The Customer Sentiments Analysis - Feedbacks workflow transforms the way busines
 
 This solution empowers organizations to improve customer satisfaction, streamline internal communication, and make data-driven improvements all with minimal manual effort.
 
-![logo](https://github.com/suneelkumar04/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis%20-%20Feedbacks/Customer%20Sentiments%20Analysis/THANKS.jpg?raw=true)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/Thanks.jpg)
 
 
 #### Thanks for following through.
