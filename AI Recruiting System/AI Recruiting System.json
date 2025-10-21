@@ -1,0 +1,405 @@
+{
+  "name": "AI Recruiting System",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9a37d608-05a2-404f-8164-b0fa27d5779c",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        256
+      ],
+      "id": "0db9b828-8ded-4461-961e-686ab79edb60",
+      "name": "Webhook",
+      "webhookId": "9a37d608-05a2-404f-8164-b0fa27d5779c"
+    },
+    {
+      "parameters": {
+        "binaryData": true,
+        "binaryPropertyName": "file",
+        "name": "={{ $binary.file.fileName }}",
+        "parents": [
+          "1SOqV7lheS9IFzDqW08T1FQ2QNmfOzWQD"
+        ],
+        "options": {}
+      },
+      "id": "172f762d-8dd3-4726-9250-db8ed9e9f83d",
+      "name": "Upload CV",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        320,
+        48
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xLIwKhmqvdBYXjb1",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c544049e-ab05-4429-8591-7debb1282711",
+              "leftValue": "={{ Number($json[\"Overall Fit % - CV\"]) }}",
+              "rightValue": "=80",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        256
+      ],
+      "id": "55ce51c7-848b-41e7-8b54-8e20624de4b9",
+      "name": "Filter",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"job_title\": \"Junior Data Analyst\",\n  \"requirements\": \"Proficiency in Excel, SQL, and Power BI; basic knowledge of Python; strong analytical and problem-solving skills; attention to detail; bachelor's degree in Computer Science, Statistics, or related field.\",\n  \"responsibilities\": \"Collect and clean data from multiple sources; assist in building dashboards and visualizations; support senior analysts in reporting and insights; identify data trends; ensure data accuracy and consistency.\",\n  \"company_name\": \"DataX Analytics\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        544,
+        256
+      ],
+      "id": "06d75a8f-853c-48cc-9df9-54a1314f73c6",
+      "name": "Role Requirement Assign"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        768,
+        480
+      ],
+      "id": "b45bd172-8621-4dd2-a76d-bc36ad78edbf",
+      "name": "Google LLM",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FazlS1GMpt3FgLNF",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Extract Info from CV').item.json.info.Author }},  {{ $('Extract Info from CV').item.json.text }}",
+        "options": {
+          "systemMessage": "=You are an AI Recruiting System with ATS (Applicant Tracking System) capabilities.\n\nYour task: Analyze the candidate’s resume (provided in input) and compare it with the job details below.\nReturn a concise, structured output suitable for adding directly to a Google Sheet.\n\n──────────────────────────────\n🎯 JOB DETAILS\n──────────────────────────────\nJob Title: {{$json[\"job_title\"]}}\nCompany: {{$json[\"company_name\"]}}\n\nRequirements:\n{{$json[\"requirements\"]}}\n\nResponsibilities:\n{{$json[\"responsibilities\"]}}\n\n──────────────────────────────\n📄 OUTPUT FORMAT (MATCHES SHEET COLUMNS)\n──────────────────────────────\nCandidate Name: [Extracted name from resume, or “N/A”]\nCandidate Gmail: [Extracted email, or “N/A”]\nEducation: [Highest degree or field]\nTechnical Score: [Score out of 100 based on hard skills]\nSoft Skills Score: [Score out of 100 based on communication, teamwork, adaptability]\nOverall Fit % - CV: [Overall match % between resume and job]\nRemarks: [1–2 short lines summarizing key strengths or improvement areas]\nRecommendation: [✅ Recommended / ⚠️ Consider / ❌ Not Recommended]\nResume Link: [Use {{$json[\"resume_link\"]}} if provided, else “N/A”]\n\n──────────────────────────────\n💬 STYLE & TONE\n──────────────────────────────\n- Be brief and factual (max 3 sentences total)\n- No bullet points or long explanations\n- Professional and recruiter-style tone\n- Focus on clarity, relevance, and hiring suitability\n- Output must be clean and easily copyable to Google Sheets"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        256
+      ],
+      "id": "e5f5bd4e-9b63-4894-9468-03500a39dc62",
+      "name": "Recruiting System"
+    },
+    {
+      "parameters": {
+        "sendTo": "shivanisuneel82@gmail.com",
+        "subject": "=New Candidate Recommended for the Role {{ $('Role Requirement Assign').item.json.job_title }}",
+        "message": "=<!DOCTYPE html>\n<html>\n  <body style=\"font-family: Arial, sans-serif; color: #333; line-height: 1.6;\">\n    <p>Dear HR Team,</p>\n\n    <p>\n      A new candidate has been marked as \n      <strong style=\"color: green;\">{{$json[\"Recommendation\"] || \"Recommended\"}}</strong> \n      for the role of <strong>{{$json[\"Role\"] || \"Junior Data Analyst\"}}</strong> at \n      <strong>{{$json[\"Company\"] || \"DataX Analytics\"}}</strong>.\n    </p>\n\n    <p><strong>Here are the key details:</strong></p>\n\n    <ul style=\"padding-left: 20px; margin-top: 8px;\">\n      <li><strong>Candidate Name:</strong> {{$json[\"Candidate Name\"] || \"N/A\"}}</li>\n      <li><strong>Email:</strong> {{$json[\"Email\"] || \"N/A\"}}</li>\n      <li><strong>Education:</strong> {{$json[\"Education\"] || \"N/A\"}}</li>\n      <li><strong>Technical Score:</strong> {{$json[\"Technical Score\"] || \"N/A\"}}</li>\n      <li><strong>Soft Skills Score:</strong> {{$json[\"Soft Skills Score\"] || \"N/A\"}}</li>\n      <li><strong>Overall Fit %:</strong> {{$json[\"Overall Fit %\"] || \"N/A\"}}</li>\n      <li><strong>Remarks:</strong> {{$json[\"Remarks\"] || \"N/A\"}}</li>\n      <li><strong>Recommendation:</strong> {{$json[\"Recommendation\"] || \"N/A\"}}</li>\n      <li><strong>Resume Link:</strong> <a href=\"{{$json[\"Resume Link\"]}}\" target=\"_blank\">{{$json[\"Resume Link\"] || \"N/A\"}}</a></li>\n    </ul>\n\n    <p>Best regards,<br>\n    <strong>AI Recruiting System</strong><br>\n    {{$json[\"Company\"] || \"DataX Analytics\"}}</p>\n  </body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1536,
+        256
+      ],
+      "id": "568da589-c8b8-42dd-b987-75f4611f2d78",
+      "name": "Selected CV - Mail to HR",
+      "webhookId": "64c6c639-d098-419a-b228-f3a8080a0e3f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1uSqrKi5aoGZtAYX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1yPMkHmKfdrc7wpN16OpC2KRtaDC8BNSvskZgVfAIECk/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yPMkHmKfdrc7wpN16OpC2KRtaDC8BNSvskZgVfAIECk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Recommendation": "={{ $json.output.split('\\n').find(line => line.startsWith('Recommendation:')).split(': ')[1] }}",
+            "Candidate Name": "={{ $json.output.split('\\n').find(line => line.startsWith('Candidate Name:')).split(': ')[1] }}",
+            "Candidate Gmail": "={{ $json.output.split('\\n').find(line => line.startsWith('Candidate Gmail:')).split(': ')[1] }}",
+            "Education": "={{ $json.output.split('\\n').find(line => line.startsWith('Education:')).split(': ')[1] }}",
+            "Technical Score": "={{ $json.output.split('\\n').find(line => line.startsWith('Technical Score:')).split(': ')[1] }}",
+            "Soft Skills Score": "={{ $json.output.split('\\n').find(line => line.startsWith('Soft Skills Score:')).split(': ')[1] }}",
+            "Overall Fit % - CV": "={{ $json.output.split('\\n').find(line => line.startsWith('Overall Fit % - CV:')).split(': ')[1] }}",
+            "Remarks": "={{ $json.output.split('\\n').find(line => line.startsWith('Remarks:')).split(': ')[1] }}",
+            "Resume Link": "={{ $json.output.split('\\n').find(line => line.startsWith('Resume Link:')).split(': ')[1] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Candidate Name",
+              "displayName": "Candidate Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Candidate Gmail",
+              "displayName": "Candidate Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Education",
+              "displayName": "Education",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Technical Score",
+              "displayName": "Technical Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Soft Skills Score",
+              "displayName": "Soft Skills Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Overall Fit % - CV",
+              "displayName": "Overall Fit % - CV",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Remarks",
+              "displayName": "Remarks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Recommendation",
+              "displayName": "Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Resume Link",
+              "displayName": "Resume Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1120,
+        256
+      ],
+      "id": "9b760cd9-6913-494f-a631-eb0b9118bf3b",
+      "name": "Candidate Info to Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "L6zUG5AfiNZFYjTB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "file",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        320,
+        256
+      ],
+      "id": "34ef550e-baad-4988-818c-35361dd1f84b",
+      "name": "Extract Info from CV"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Upload CV",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Extract Info from CV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload CV": {
+      "main": [
+        []
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Selected CV - Mail to HR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Role Requirement Assign": {
+      "main": [
+        [
+          {
+            "node": "Recruiting System",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google LLM": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Recruiting System",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recruiting System": {
+      "main": [
+        [
+          {
+            "node": "Candidate Info to Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Candidate Info to Sheet": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Info from CV": {
+      "main": [
+        [
+          {
+            "node": "Role Requirement Assign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "54e885f0-8954-4da7-8707-adc2d86e26b7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "211a9b3113fb1f50ccdafd8244b5d8994d8d399b72f0515cfe3acf55c2771c71"
+  },
+  "id": "uFejb2yPH9L2P61Y",
+  "tags": []
+}
