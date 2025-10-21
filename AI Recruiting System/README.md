@@ -1,8 +1,8 @@
 # AI Recruiting System
 
- ![logo]()
- 
-----------------------------------------------------------------------------------------------------------
+ ![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/AI%20Recruiting%20System/AI%20Recruiting%20System.png)
+
+ ----------------------------------------------------------------------------------------------------------
 
 # Introduction
 
@@ -30,7 +30,7 @@ As a result, businesses often spend too much time and resources managing early-s
 Candidate submits CV → Webhook trigger → Upload to Google Drive → Extract info → Match job roles → Add to Google Sheet → Score & filter → Email summary to HR
 
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/AI%20Recruiting%20System/Workflow%20Logic%20(Breakdown).png)
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -51,7 +51,8 @@ Here’s how it works:
 This automation ensures HR only reviews high-potential candidates, drastically reducing manual work and improving hiring accuracy.
 
 
-![logo]()
+
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/AI%20Recruiting%20System/agent_recruiting_system.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -67,7 +68,13 @@ By the end of the workflow:
 
 The entire process from CV upload to HR notification occurs in real time and requires zero manual input.
 
-![logo]()
+- info_to_sheet
+
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/AI%20Recruiting%20System/info_to_sheet.png)
+
+- email_to_hr
+
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/AI%20Recruiting%20System/email_to_hr.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -88,7 +95,7 @@ The AI Recruiting System revolutionizes how businesses approach talent acquisiti
 
 This system empowers HR teams to focus on strategic decision-making rather than administrative tasks. The result is a faster, fairer, and more data-driven hiring process that ensures the best candidates are identified and recommended all with minimal effort.
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/Thanks.jpg)
 
 
 #### Thanks for following through.
