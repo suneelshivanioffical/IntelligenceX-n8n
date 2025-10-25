@@ -1,6 +1,6 @@
 # 24×7 Customer Support – Chatbot
 
- ![logo]()
+ ![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/24'7%20Customer%20Support%20-%20Chatbot/chatbot%20support%20service.png)
  
 ----------------------------------------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ These challenges often lead to poor customer satisfaction, longer resolution tim
 User Message → AI Agent → Processing Model (LLM) → Memory → FAQ Document → Response to User
 
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/24'7%20Customer%20Support%20-%20Chatbot/Workflow%20Logic%20(Breakdown).png)
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ Here’s how it works:
 This results in a seamless, intelligent, and continuous customer support experience without the need for human intervention.
 
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/24'7%20Customer%20Support%20-%20Chatbot/Customer%20Support%20Service%20-%20Chatbot.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ The result is a real-time, always-available virtual support agent that enhances 
 
 This chatbot built for Imtiaz - SportHub is powered by n8n automation.
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/24'7%20Customer%20Support%20-%20Chatbot/chatbot_demo.gif)
 
 ----------------------------------------------------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ The 24×7 Customer Support Chatbot revolutionizes digital customer interaction b
 
 By automating repetitive queries and ensuring instant replies, this system helps businesses improve customer experience, save time, and reduce operational costs, all while keeping support available 24 hours a day, 7 days a week.
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/Thanks.jpg)
 
 
 #### Thanks for following through.
