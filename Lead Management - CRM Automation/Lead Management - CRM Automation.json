@@ -1,0 +1,356 @@
+{
+  "name": "Lead Management - CRM Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Get in Touch",
+        "formDescription": "Please fill out the form below so we can connect with you.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company"
+            },
+            {
+              "fieldLabel": "Message",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -176,
+        -96
+      ],
+      "id": "f17854d3-4382-4ad4-877d-c34f9fe03d61",
+      "name": "On form submission",
+      "webhookId": "5710c60f-6090-438e-8692-8adc7603467d"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        320,
+        144
+      ],
+      "id": "02e7f90d-308d-4913-9eda-d578efd4bbfd",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FazlS1GMpt3FgLNF",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Lead Management - CRM Automation\n**When someone fills out a lead form (e.g., Typeform, Google Form, or website form), the workflow will:**\n\n- Capture the form data\n- Add or update the lead in HubSpot CRM\n- Analyzes the lead intent with AI \n- Add the lead into Airtable or Google Sheet for tracking\n- Notify the team on Slack or Email in real time.\n",
+        "height": 672,
+        "width": 1504,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "441bf2de-36f5-4585-bd14-0e16fd554b71",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09QR5BAMU1",
+          "mode": "list",
+          "cachedResultName": "new_lead_aleart"
+        },
+        "text": "=Here New Lead Received, Please check:  \n\nFull Name: {{ $json.fields.Name }}\nEmail Address: {{ $json.fields.Email }}\nLead Intent : {{ $json.fields['Lead Intent'] }}\n\n\n\nRecieved time: {{ $json.createdTime }}",
+        "otherOptions": {
+          "mrkdwn": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        976,
+        -224
+      ],
+      "id": "f56d7762-bfa2-4c39-8e48-be24524e6d49",
+      "name": "Alert Team via Slack",
+      "webhookId": "d3521a58-b139-422f-814c-9a1bf8af83b3",
+      "credentials": {
+        "slackApi": {
+          "id": "PRFFYCQ4WCeKzNZK",
+          "name": "Slack account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "skdigitalnetwork02@gmail.com",
+        "subject": "=New Lead Alert!",
+        "emailType": "text",
+        "message": "=🚀  NEW LEAD ALERT  \n\nA new lead has just submitted the form.  \n\n👤  Name: {{ $('On form submission').item.json.Name }} \n🏢  Company: {{ $('On form submission').item.json.Company }} \n✉️  Email: {{ $('On form submission').item.json.Email }} \n💬  Lead Intent: {{ $json.fields['Lead Intent'] }}\n📅  Received At: {{ $now }}\n\nView all leads here:\nhttps://airtable.com/appWgYM5qnjD4RS1z/tblBSANIgAuqNuIGx/viw8VDuyBEUBLBqS2\n\n@ Automated Lead Notification System",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        976,
+        16
+      ],
+      "id": "daf2062e-7ec0-47c0-83d2-f766b46fe36e",
+      "name": "Alert Team via email",
+      "webhookId": "f83932b3-c709-4cca-a8fb-2d12f923bb67",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1uSqrKi5aoGZtAYX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appWgYM5qnjD4RS1z",
+          "mode": "list",
+          "cachedResultName": "n8n-test",
+          "cachedResultUrl": "https://airtable.com/appWgYM5qnjD4RS1z"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblBSANIgAuqNuIGx",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appWgYM5qnjD4RS1z/tblBSANIgAuqNuIGx"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead Intent": "={{ $json.output }}",
+            "Name": "={{ $('On form submission').item.json.Name }}",
+            "Email": "={{ $('On form submission').item.json.Email }}",
+            "Company": "={{ $('On form submission').item.json.Company }}",
+            "Message": "={{ $('On form submission').item.json.Message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead Intent",
+              "displayName": "Lead Intent",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        704,
+        -96
+      ],
+      "id": "496b63e6-a058-4d84-b130-12e40b9f3ef1",
+      "name": "Save info to Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZtDAf4MB05lFPfap",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('On form submission').item.json.Message }}\n\nYou are an intelligent CRM assistant.\nYour task is to analyze incoming lead data and determine:\n1. The user’s intent (e.g., wants a demo, pricing inquiry, job application, general question).\n2. The lead’s potential interest level (e.g., high intent, medium, or low).\n3. Summarize in one sentence for logging.\n\nRespond in a single, short line like this:\n\"The user wants a product demo — high intent lead.\"",
+        "options": {
+          "systemMessage": "You are an intelligent CRM assistant.\nAnalyze each lead message and output:\n1. Lead Intent\n2. Interest Level (High, Medium, Low)\n3. Lead Score (1–100)\n4. One-line Summary\n\nFormat:\nIntent: [short text]\nInterest: [High/Medium/Low]\nScore: [number]\nSummary: [sentence]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        320,
+        -96
+      ],
+      "id": "258dbae1-0b42-44a2-8e0c-8200f369ed23",
+      "name": "AI Enrichment"
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "email": "={{ $json.Email }}",
+        "additionalFields": {
+          "companyName": "={{ $json.Company }}",
+          "firstName": "={{ $json[\"Name\"].split(\" \")[0] }}\n",
+          "lastName": "={{ $json[\"Name\"].split(\" \")[1] }}",
+          "message": "={{ $json.Message }}"
+        },
+        "options": {
+          "resolveData": false
+        }
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "7914ca19-2e11-484b-9ecb-80bed2791252",
+      "name": "Create/update a contact in Hubspot CRM",
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "4EEiagJrkuAz8xEC",
+          "name": "HubSpot account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Create/update a contact in Hubspot CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Enrichment",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save info to Airtable": {
+      "main": [
+        [
+          {
+            "node": "Alert Team via email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Alert Team via Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Enrichment": {
+      "main": [
+        [
+          {
+            "node": "Save info to Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create/update a contact in Hubspot CRM": {
+      "main": [
+        [
+          {
+            "node": "AI Enrichment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "60cde8cf-47e2-4193-a8d8-32a327b1076e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "211a9b3113fb1f50ccdafd8244b5d8994d8d399b72f0515cfe3acf55c2771c71"
+  },
+  "id": "8Tn1jFA9DQGV8z0J",
+  "tags": []
+}
