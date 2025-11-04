@@ -1,8 +1,6 @@
  # Lead Management – CRM Automation
-
- ![logo]()
  
-----------------------------------------------------------------------------------------------------------
+ ----------------------------------------------------------------------------------------------------------
 
 # Introduction
 
@@ -25,7 +23,7 @@ Businesses needed a fully automated, intelligent lead pipeline that ensures ever
 Capture the form data → Add or update the lead in HubSpot CRM → Analyzes the lead intent with AI → Add the lead into Airtable/Google Sheet for tracking → Notify the team on Slack or Email in real time.
 
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Lead%20Management%20-%20CRM%20Automation/Workflow%20Logic%20(Breakdown).png)
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -44,7 +42,7 @@ When someone fills out a form (Typeform, or website form), n8n automatically:
 This ensures no lead is ever missed, and the sales team receives immediate context about the lead’s intent and priority.
 
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Lead%20Management%20-%20CRM%20Automation/agent_lead_management_automation.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -67,15 +65,19 @@ By the end of the workflow:
 
 A new or updated contact in HubSpot CRM
 
-AI-enriched intent field (e.g., “High Intent,” “Medium Intent,” “Low Intent”)
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Lead%20Management%20-%20CRM%20Automation/new%20or%20updated%20contact%20in%20HubSpot%20CRM.png)
 
 A record entry in Airtable for lead tracking
 
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Lead%20Management%20-%20CRM%20Automation/record%20entry%20in%20Airtable%20for%20lead%20tracking.png)
+
 Instant Slack message with lead name, intent, and next steps
+
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Lead%20Management%20-%20CRM%20Automation/Instant%20Slack%20message%20with%20lead.png)
 
 Email notification with lead details for sales follow-up
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Lead%20Management%20-%20CRM%20Automation/email_notification%20with%20lead%20details%20for%20sales%20follow-up.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -93,7 +95,7 @@ The Lead Management – CRM Automation workflow redefines how businesses manage 
 
 By automating form submissions, CRM updates, enrichment, and team notifications, this system helps businesses reduce manual work, improve response time, and boost lead conversion efficiency, all in real time.
 
-![logo]()
+![logo](https://github.com/suneelshivanioffical/IntelligenceX-n8n/blob/main/Customer%20Sentiments%20Analysis/Thanks.jpg)
 
 
 #### Thanks for following through.
